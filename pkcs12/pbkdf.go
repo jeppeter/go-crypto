@@ -109,7 +109,7 @@ func pbkdf(hash func([]byte) []byte, u, v int, salt, password []byte, r int, ID 
 	c := (size + u - 1) / u
 
 	//    6.  For i=1, 2, ..., c, do the following:
-	A := make([]byte, c*20)
+	A := make([]byte, c*size)
 	var IjBuf []byte
 	for i := 0; i < c; i++ {
 		//        A.  Set A2=H^r(D||I). (i.e., the r-th hash of D||1,

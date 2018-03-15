@@ -11,7 +11,6 @@ import (
 	"crypto/x509/pkix"
 	"encoding/asn1"
 	"errors"
-
 	"github.com/jeppeter/go-crypto/pkcs12/internal/rc2"
 )
 

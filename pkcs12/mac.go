@@ -60,13 +60,12 @@ func verifyMac(macData *macData, message, password []byte) error {
 		mac.Write(message)
 		expectedMAC = mac.Sum(nil)
 	} else if macData.Mac.Algorithm.Algorithm.Equal(oidSHA256) {
-		key := pbkdf(sha256Sum, 32, 64, macData.MacSalt, password, macData.Iterations, 3, 20)
+		key := pbkdf(sha256Sum, 32, 64, macData.MacSalt, password, macData.Iterations, 3, 32)
 		mac := hmac.New(sha256.New, key)
 		mac.Write(message)
 		expectedMAC = mac.Sum(nil)
 	}
 
-	fmt.Printf("iterations %d\ndigest\n%v\nexpectMAC\n%v\n", macData.Iterations, formatByte(macData.Mac.Digest), formatByte(expectedMAC))
 	if !hmac.Equal(macData.Mac.Digest, expectedMAC) {
 		return ErrIncorrectPassword
 	}
