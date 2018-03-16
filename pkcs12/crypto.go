@@ -11,12 +11,14 @@ import (
 	"crypto/x509/pkix"
 	"encoding/asn1"
 	"errors"
+	"fmt"
 	"github.com/jeppeter/go-crypto/pkcs12/internal/rc2"
 )
 
 var (
 	oidPBEWithSHAAnd3KeyTripleDESCBC = asn1.ObjectIdentifier([]int{1, 2, 840, 113549, 1, 12, 1, 3})
 	oidPBEWithSHAAnd40BitRC2CBC      = asn1.ObjectIdentifier([]int{1, 2, 840, 113549, 1, 12, 1, 6})
+	oidPBES2                         = asn1.ObjectIdentifier([]int{1, 2, 840, 113549, 1, 5, 13})
 )
 
 // pbeCipher is an abstraction of a PKCS#12 cipher.
@@ -70,6 +72,9 @@ func pbDecrypterFor(algorithm pkix.AlgorithmIdentifier, password []byte) (cipher
 		cipherType = shaWithTripleDESCBC{}
 	case algorithm.Algorithm.Equal(oidPBEWithSHAAnd40BitRC2CBC):
 		cipherType = shaWith40BitRC2CBC{}
+	case algorithm.Algorithm.Equal(oidPBES2):
+		fmt.Printf("fullbytes %s", formatByte(algorithm.Parameters.FullBytes))
+		return nil, 0, NotImplementedError("algorithm " + algorithm.Algorithm.String() + " is not supported")
 	default:
 		return nil, 0, NotImplementedError("algorithm " + algorithm.Algorithm.String() + " is not supported")
 	}
